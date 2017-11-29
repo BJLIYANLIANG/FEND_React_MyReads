@@ -1,6 +1,23 @@
 import React, { Component } from 'react';
 
 class Book extends Component {
+
+  state = {
+      shelf: "none"
+  }
+
+  onShelfChange = (event) => {
+    let shelf = event.target.value;
+    this.props.onShelfChange(this.props.book, shelf)
+    this.setState({shelf: shelf});
+  };
+
+  componentDidMount() {
+    if ('shelf' in this.props.book) {
+        this.setState({shelf: this.props.book.shelf});
+    }
+  }
+
   render() {
     let book = this.props.book;
 
@@ -16,7 +33,7 @@ class Book extends Component {
             }}
           />
           <div className="book-shelf-changer">
-            <select>
+            <select value={this.state.shelf} onChange={this.onShelfChange}>
               <option value="none" disabled>
                 Move to...
               </option>

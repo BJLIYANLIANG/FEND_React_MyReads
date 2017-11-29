@@ -7,14 +7,19 @@ import * as BooksAPI from './BooksAPI'
 
 class BooksApp extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
     books : [],
   }
+
+  changeBookShelf = (book, shelf) => {
+    let books = this.state.books;
+    books.forEach(b => {
+      if(b.id === book.id) {
+        b.shelf = shelf;
+      }
+    });
+    this.setState({books: books});
+    BooksAPI.update(book, shelf);
+  };
 
   componentDidMount() {
     BooksAPI.getAll().then(results => {
@@ -26,8 +31,6 @@ class BooksApp extends React.Component {
     let currently_book = this.state.books.filter(book => book.shelf === 'currentlyReading');
     let wantToRead_book = this.state.books.filter(book => book.shelf === 'wantToRead');
     let read_book = this.state.books.filter(book => book.shelf === 'read');
-
-    console.log(this.state.books);
 
     return (
       <div className="app">
@@ -44,7 +47,7 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                       {currently_book.map(book =>(
                         <li key={book.id}>
-                          <Book book={book} />
+                          <Book book={book} onShelfChange={this.changeBookShelf} />
                         </li>
                       ))}
                     </ol>
@@ -56,7 +59,7 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                       {wantToRead_book.map(book =>(
                         <li key={book.id}>
-                          <Book book={book} />
+                          <Book book={book} onShelfChange={this.changeBookShelf} />
                         </li>
                       ))}
                     </ol>
@@ -68,7 +71,7 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                       {read_book.map(book =>(
                         <li key={book.id}>
-                          <Book book={book} />
+                          <Book book={book} onShelfChange={this.changeBookShelf} />
                         </li>
                       ))}
                     </ol>
