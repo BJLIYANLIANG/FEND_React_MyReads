@@ -6,14 +6,14 @@ import * as BooksAPI from './BooksAPI'
 
 class SearchBook extends Component {
   state = {
-    query: '',
-    searchResults: [],
+    books: [],
   };
 
   onEnterKey = (query) => {
     console.log(query);
-    BooksAPI.search(query, 10).then(result => {
-      console.log(result);
+    BooksAPI.search(query, 10).then(books => {
+      console.log(books);
+      this.setState({books: books});
     });
   }
 
@@ -38,7 +38,7 @@ class SearchBook extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.searchResults.map(book =>(
+            {this.state.books.map(book =>(
               <li key={book.id}>
                 <Book book={book} />
               </li>
