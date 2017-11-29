@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 
+/**
+ * 书本组件
+ */
 class Book extends Component {
 
   state = {
       shelf: "none"
   }
 
+  /**
+   * 当自己的状态发生改变触发
+   * @param {Event} event 
+   */
   onShelfChange = (event) => {
     let shelf = event.target.value;
     this.props.onShelfChange(this.props.book, shelf)

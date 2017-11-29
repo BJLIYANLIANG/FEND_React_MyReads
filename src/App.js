@@ -10,13 +10,24 @@ class BooksApp extends React.Component {
     books : [],
   }
 
+  /**
+   * 修改书的shelf，如果书不存在，就添加书，会同步到云端
+   * @param {Book} book 需要修改的书
+   * @param {string} shelf 
+   */ 
   changeBookShelf = (book, shelf) => {
     let books = this.state.books;
+    let is_find = false;
     books.forEach(b => {
       if(b.id === book.id) {
         b.shelf = shelf;
+        is_find = true;
       }
     });
+    if (!is_find) {
+      book.shelf = shelf;
+      books.push(book);
+    }
     this.setState({books: books});
     BooksAPI.update(book, shelf);
   };
@@ -28,6 +39,7 @@ class BooksApp extends React.Component {
   }
 
   render() {
+    // 三个筛选器
     let currently_book = this.state.books.filter(book => book.shelf === 'currentlyReading');
     let wantToRead_book = this.state.books.filter(book => book.shelf === 'wantToRead');
     let read_book = this.state.books.filter(book => book.shelf === 'read');
@@ -86,9 +98,9 @@ class BooksApp extends React.Component {
         )} />
         <Route path='/search' render={({ history }) => (
           <SearchBooks
-            onAddBook={(boot, type) => {
-              console.log("add Book");
-              history.push('/')
+            onAddBook={(book, shelf) => {
+              this.changeBookShelf(book, shelf);
+              history.push('/');
             }}
           />
         )}/>

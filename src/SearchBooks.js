@@ -4,18 +4,35 @@ import './App.css';
 import Book from "./Book";
 import * as BooksAPI from './BooksAPI'
 
+/**
+ * 搜索书本的组件
+ */
 class SearchBook extends Component {
   state = {
     books: [],
   };
 
+
+  /**
+   * 当用户在输入框的情况下按下回车，出发此方法
+   * @param {string} query 要搜索的关键词
+   * 注意，只支持这些 Cook 等少数关键次
+   */
   onEnterKey = (query) => {
-    console.log(query);
+    console.log("query" + query);
     BooksAPI.search(query, 10).then(books => {
-      console.log(books);
       this.setState({books: books});
     });
   }
+
+  /**
+   * 用户添加书本
+   * @param {Book} book 要添加的书本
+   * @param {string} shelf 
+   */
+  addBook = (book, shelf) => {
+    this.props.onAddBook(book, shelf);
+  };
 
   render() {
     return (
@@ -32,7 +49,7 @@ class SearchBook extends Component {
           <ol className="books-grid">
             {this.state.books.map(book =>(
               <li key={book.id}>
-                <Book book={book} />
+                <Book book={book} onShelfChange={this.addBook}/>
               </li>
             ))}
           </ol>
