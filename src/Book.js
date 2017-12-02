@@ -28,16 +28,18 @@ class Book extends Component {
   render() {
     let book = this.props.book;
 
+    const coverStyle = {
+      width: 128,
+      height: 193,
+      backgroundImage: `url(${book.imageLinks.smallThumbnail})`
+    };
+
     return (
       <div className="book">
         <div className="book-top">
           <div
             className="book-cover"
-            style={{
-              width: 128,
-              height: 193,
-              backgroundImage: `url(${book.imageLinks.smallThumbnail})`
-            }}
+            style={coverStyle}
           />
           <div className="book-shelf-changer">
             <select value={this.state.shelf} onChange={this.onShelfChange}>

@@ -53,42 +53,23 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {currently_book.map(book =>(
-                        <li key={book.id}>
-                          <Book book={book} onShelfChange={this.changeBookShelf} />
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Want to Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {wantToRead_book.map(book =>(
-                        <li key={book.id}>
-                          <Book book={book} onShelfChange={this.changeBookShelf} />
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {read_book.map(book =>(
-                        <li key={book.id}>
-                          <Book book={book} onShelfChange={this.changeBookShelf} />
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
+                {
+                  [currently_book, wantToRead_book, read_book].map((books, index) => (
+                      <div className="bookshelf" key={index}>
+                        <h2 className="bookshelf-title">Currently Reading</h2>
+                        <div className="bookshelf-books">
+                          <ol className="books-grid">
+                            {books.map(book =>(
+                              <li key={book.id}>
+                                <Book book={book} onShelfChange={this.changeBookShelf} />
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+                      </div>
+                    )
+                  )
+                }
               </div>
             </div>
             <div className="open-search">
@@ -98,6 +79,7 @@ class BooksApp extends React.Component {
         )} />
         <Route path='/search' render={({ history }) => (
           <SearchBooks
+            localBooks={this.state.books.map(book => ({id:book.id, shelf:book.shelf}))}
             onAddBook={(book, shelf) => {
               this.changeBookShelf(book, shelf);
               history.push('/');

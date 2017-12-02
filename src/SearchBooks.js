@@ -12,7 +12,6 @@ class SearchBook extends Component {
     books: [],
   };
 
-
   /**
    * 当用户在输入框的情况下按下回车，出发此方法
    * @param {string} query 要搜索的关键词
@@ -20,7 +19,18 @@ class SearchBook extends Component {
    */
   onEnterKey = (query) => {
     console.log("query" + query);
+
     BooksAPI.search(query, 10).then(books => {
+      let localBookMap = new Map();
+      for(let localBook of this.props.localBooks) {
+        localBookMap.set(localBook.id, localBook.shelf);
+      }
+      // 从本地书本里面同步 shelf信息
+      for(let book of books) {
+        if (localBookMap.has(book.id)) {
+          book.shelf = localBookMap.get(book.id);
+        } 
+      }
       this.setState({books: books});
     });
   }
