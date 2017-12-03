@@ -56,7 +56,7 @@ class BooksApp extends React.Component {
                 {
                   [currently_book, wantToRead_book, read_book].map((books, index) => (
                       <div className="bookshelf" key={index}>
-                        <h2 className="bookshelf-title">Currently Reading</h2>
+                        <h2 className="bookshelf-title">{books.length>0 && books[0].shelf}</h2>
                         <div className="bookshelf-books">
                           <ol className="books-grid">
                             {books.map(book =>(
